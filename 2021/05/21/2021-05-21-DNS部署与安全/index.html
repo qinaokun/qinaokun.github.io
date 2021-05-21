@@ -1,0 +1,273 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DNS部署与安全 | rain</title><meta name="author" content="qinaokun,2396880196@qq.com"><meta name="copyright" content="qinaokun"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="DNS部署与安全DNSDOmain Name Service 域名服务 作用：为客户提供域名解析服务 域名组成如“www.sina.com.cn”是一个域名，从严格意义上来讲，“sina.com.cn”才被称为域名（全球唯一），而“www”是主机名。 “主机名.域名”称为完全限定域名（FQDN）。一个域名下可以有多台主机，域名全球唯一，所以“主机名.域名”肯定也是全球唯一的。 以“sina.com">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DNS部署与安全">
+<meta property="og:url" content="http://dva.net.cn/2021/05/21/2021-05-21-DNS%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%AE%89%E5%85%A8/index.html">
+<meta property="og:site_name" content="rain">
+<meta property="og:description" content="DNS部署与安全DNSDOmain Name Service 域名服务 作用：为客户提供域名解析服务 域名组成如“www.sina.com.cn”是一个域名，从严格意义上来讲，“sina.com.cn”才被称为域名（全球唯一），而“www”是主机名。 “主机名.域名”称为完全限定域名（FQDN）。一个域名下可以有多台主机，域名全球唯一，所以“主机名.域名”肯定也是全球唯一的。 以“sina.com">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://dva.net.cn/2021/05/21/2021-05-21-DNS%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%AE%89%E5%85%A8/0.jpg">
+<meta property="article:published_time" content="2021-05-21T07:55:37.000Z">
+<meta property="article:modified_time" content="2021-05-21T10:32:55.471Z">
+<meta property="article:author" content="qinaokun">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://dva.net.cn/2021/05/21/2021-05-21-DNS%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%AE%89%E5%85%A8/0.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://dva.net.cn/2021/05/21/2021-05-21-DNS%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%AE%89%E5%85%A8/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"过时","messageNext":"更新后"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-05-21 18:32:55'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/font_2423059_pqt5m24xbw.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="https://tva4.sinaimg.cn/large/006tuCX0ly1gp6yd2j3t5j30m80m875j.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw iconfont icon-shouye"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw iconfont icon-shijianzhou"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw iconfont icon-biaoqian1"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw iconfont icon-biaoqing"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw iconfont icon-guanyu"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/2021/05/21/2021-05-21-DNS%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%AE%89%E5%85%A8/0.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">rain</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw iconfont icon-shouye"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw iconfont icon-shijianzhou"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw iconfont icon-biaoqian1"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw iconfont icon-biaoqing"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw iconfont icon-guanyu"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">DNS部署与安全</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-21T07:55:37.000Z" title="发表于 2021-05-21 15:55:37">2021-05-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-05-21T10:32:55.471Z" title="更新于 2021-05-21 18:32:55">2021-05-21</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="DNS部署与安全"><a href="#DNS部署与安全" class="headerlink" title="DNS部署与安全"></a>DNS部署与安全</h2><h2 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h2><p>DOmain Name Service 域名服务</p>
+<p>作用：为客户提供域名解析服务</p>
+<h2 id="域名组成"><a href="#域名组成" class="headerlink" title="域名组成"></a>域名组成</h2><p>如“<a target="_blank" rel="noopener" href="http://www.sina.com.cn”是一个域名,从严格意义上来讲,“sina.com.cn”才被称为域名(全球唯一),而“www”是主机名./">www.sina.com.cn”是一个域名，从严格意义上来讲，“sina.com.cn”才被称为域名（全球唯一），而“www”是主机名。</a></p>
+<p>“主机名.域名”称为完全限定域名（FQDN）。一个域名下可以有多台主机，域名全球唯一，所以“主机名.域名”肯定也是全球唯一的。</p>
+<p>以“sina.com.cn”域名为例，一般管理员在命名其主机时会根据主机的功能进行命名，比如网站是www，博客是blog，论坛是bbs，那么对应的FQDN为<a target="_blank" rel="noopener" href="http://www.sina.com.cn,blog.sina.com.an,bbs.sina.com.cn等多个fqdn,然而我们只需要申请一个域名就可以了./">www.sina.com.cn，blog.sina.com.an，bbs.sina.com.cn等多个FQDN，然而我们只需要申请一个域名就可以了。</a></p>
+<h2 id="ping-ip地址-域名"><a href="#ping-ip地址-域名" class="headerlink" title="ping ip地址/域名"></a>ping ip地址/域名</h2><p>检查目标与本机的连接性</p>
+<h2 id="nslookup-域名"><a href="#nslookup-域名" class="headerlink" title="nslookup 域名"></a>nslookup 域名</h2><p>解析域名查询IP地址</p>
+<h2 id="监听端口"><a href="#监听端口" class="headerlink" title="监听端口"></a>监听端口</h2><p>TCP53</p>
+<p>UDP53</p>
+<h2 id="DNS解析种类"><a href="#DNS解析种类" class="headerlink" title="DNS解析种类"></a>DNS解析种类</h2><ol>
+<li><h3 id="按照查询方式分类"><a href="#按照查询方式分类" class="headerlink" title="按照查询方式分类"></a>按照查询方式分类</h3><ol>
+<li><p>递归查询：客户机与本地DNS服务器之间</p>
+<p>所问即所答，客户机发起询问，本地DNS服务器直接响应结果</p>
+</li>
+<li><p>迭代查询：本地DNS服务器与根等其他服务器</p>
+<p>客户机发起询问，本地DNS服务器没有结果，向根域发送请求，根域返回请求指向顶级域名，本地DNS根据返回的顶级域名再次查询，以此类推直到找到结果并返回本地DNS服务器</p>
+</li>
+</ol>
+</li>
+<li><h3 id="按照查询内容分类"><a href="#按照查询内容分类" class="headerlink" title="按照查询内容分类"></a>按照查询内容分类</h3><ol>
+<li>正向解析：已知域名，解析ip地址</li>
+<li>反向解析：已知ip地址，解析域名</li>
+</ol>
+</li>
+</ol>
+<p>公司设置DNS服务器一般会设置转发器，客户机请求到DNF服务器，再把请求转发给公网上的DNS服务器，减轻负担，此过程为递归查询。</p>
+<h2 id="windows-部署DNS服务"><a href="#windows-部署DNS服务" class="headerlink" title="windows-部署DNS服务"></a>windows-部署DNS服务</h2><p>安装DNS服务。软件装好后什么都不做也可以正常提供DNS服务，因为会直接去找根进行交互，这种服务器称为缓存服务器。</p>
+<p>打开DNS软件，在正向查找区域，右键新建区域，选择主要区域，设置区域名称，表示自身负责的解析区域，之后会新建一个区域文件，若网络情况没有形成域，资源选择不允许动态更新，之后完成。在软件上点击选中区域文件后，在右边可以新建解析记录。空白处右键新建主机（A）记录，是一个标准的正向解析记录，设置主机名称与正确ip地址。新建成功后，使用命令行解析域名，结果为新建的记录ip地址即为成功。</p>
+<p>在DHCP服务作用域选项中设置本次DNS服务地址，这样才能正常使用新设置的本地DNS服务。</p>
+<h2 id="ipconfig-flushdns"><a href="#ipconfig-flushdns" class="headerlink" title="ipconfig /flushdns"></a>ipconfig /flushdns</h2><p>删除本机dns缓存</p>
+<h2 id="ipconfig-displaydns"><a href="#ipconfig-displaydns" class="headerlink" title="ipconfig /displaydns"></a>ipconfig /displaydns</h2><p>显示本地的dns解析记录</p>
+<h2 id="为dns服务器起一个访问名"><a href="#为dns服务器起一个访问名" class="headerlink" title="为dns服务器起一个访问名"></a>为dns服务器起一个访问名</h2><p>使用域名访问dns服务器而不是使用IP地址，右键新建主机记录，设置名称，讲ip地址设为服务器地址，勾选创建相关的指针（PTR）记录，点击完成。在反向查找区域，右键新建区域，设置服务器ip地址前3位，之后直接下一步至完成。在方向查找区域右侧新建PTR记录，输入主机ip号（服务器ip地址最后一位）后，在主机名选项中，选择新建好的被用来做dns访问名的记录。再次使用命令行解析域名，出现设置正确的dns服务器名称与地址则代表成功。</p>
+<h2 id="转发器"><a href="#转发器" class="headerlink" title="转发器"></a>转发器</h2><p>在服务器管理页面右击服务器点击属性，在转发器选项设置充当转发器的dns服务器的ip。</p>
+<h2 id="区域复制"><a href="#区域复制" class="headerlink" title="区域复制"></a>区域复制</h2><p>选中区域文件右键点击属性，找到区域复制选项，选择允许区域复制，只允许到下列服务器，若是选择到所有，会形成漏洞，设置可以复制区域文件的dns服务器IP。</p>
+<p>新的dns服务器上安装好软件后，在正向查找区域右键新建区域，选择辅助区域，设置区域名称，设置可以获取备份的主dns服务器，完成。</p>
+<h2 id="清空dns服务器缓存"><a href="#清空dns服务器缓存" class="headerlink" title="清空dns服务器缓存"></a>清空dns服务器缓存</h2><p>在dns管理页面点击上方查找选项，点击高级，会出现缓存的查找文件，对准查找右键点击清除缓存。</p>
+<h2 id="为已有的域名建立别名"><a href="#为已有的域名建立别名" class="headerlink" title="为已有的域名建立别名"></a>为已有的域名建立别名</h2><p>在解析记录界面空白处右键新建别名，给已有的解析记录建一个别名，设置别名，浏览找到此条解析记录，完成。</p>
+<p>解析记录里SOA类型表示权威服务器，NS类型表示负责此域的dns服务器。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2021/05/20/2021-05-20-DHCP%E7%9A%84%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%AE%89%E5%85%A8/"><img class="prev-cover" data-lazy-src="/2021/05/20/2021-05-20-DHCP%E7%9A%84%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%AE%89%E5%85%A8/0.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">DHCP的部署与安全</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%AE%89%E5%85%A8"><span class="toc-number">1.</span> <span class="toc-text">DNS部署与安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS"><span class="toc-number">2.</span> <span class="toc-text">DNS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%9F%E5%90%8D%E7%BB%84%E6%88%90"><span class="toc-number">3.</span> <span class="toc-text">域名组成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ping-ip%E5%9C%B0%E5%9D%80-%E5%9F%9F%E5%90%8D"><span class="toc-number">4.</span> <span class="toc-text">ping ip地址&#x2F;域名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nslookup-%E5%9F%9F%E5%90%8D"><span class="toc-number">5.</span> <span class="toc-text">nslookup 域名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%91%E5%90%AC%E7%AB%AF%E5%8F%A3"><span class="toc-number">6.</span> <span class="toc-text">监听端口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS%E8%A7%A3%E6%9E%90%E7%A7%8D%E7%B1%BB"><span class="toc-number">7.</span> <span class="toc-text">DNS解析种类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%89%E7%85%A7%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F%E5%88%86%E7%B1%BB"><span class="toc-number">7.1.</span> <span class="toc-text">按照查询方式分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%89%E7%85%A7%E6%9F%A5%E8%AF%A2%E5%86%85%E5%AE%B9%E5%88%86%E7%B1%BB"><span class="toc-number">7.2.</span> <span class="toc-text">按照查询内容分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#windows-%E9%83%A8%E7%BD%B2DNS%E6%9C%8D%E5%8A%A1"><span class="toc-number">8.</span> <span class="toc-text">windows-部署DNS服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ipconfig-flushdns"><span class="toc-number">9.</span> <span class="toc-text">ipconfig &#x2F;flushdns</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ipconfig-displaydns"><span class="toc-number">10.</span> <span class="toc-text">ipconfig &#x2F;displaydns</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BAdns%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%B5%B7%E4%B8%80%E4%B8%AA%E8%AE%BF%E9%97%AE%E5%90%8D"><span class="toc-number">11.</span> <span class="toc-text">为dns服务器起一个访问名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AC%E5%8F%91%E5%99%A8"><span class="toc-number">12.</span> <span class="toc-text">转发器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%BA%E5%9F%9F%E5%A4%8D%E5%88%B6"><span class="toc-number">13.</span> <span class="toc-text">区域复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%85%E7%A9%BAdns%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%93%E5%AD%98"><span class="toc-number">14.</span> <span class="toc-text">清空dns服务器缓存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E5%B7%B2%E6%9C%89%E7%9A%84%E5%9F%9F%E5%90%8D%E5%BB%BA%E7%AB%8B%E5%88%AB%E5%90%8D"><span class="toc-number">15.</span> <span class="toc-text">为已有的域名建立别名</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url('/2021/05/21/2021-05-21-DNS%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%AE%89%E5%85%A8/0.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2021 By qinaokun</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text"><i class="iconfont icon-ICPbeian"></i><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/"><span>晋ICP备2021009239号</span></a><img src="/img/0.png" style="height:10px"></img><a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=14050002000175"><span>晋公网安备 14050002000175号</span></a><br/>个人小破站！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="1" zIndex="-1" count="200" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  if (typeof gtag === 'function') {
+    gtag('config', '', {'page_path': window.location.pathname});
+  }
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+
+document.addEventListener('pjax:send', function () {
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
