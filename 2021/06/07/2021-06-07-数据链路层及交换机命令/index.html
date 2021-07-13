@@ -1,16 +1,16 @@
 <!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>数据链路层及交换机命令 | rain</title><meta name="author" content="qinaokun,2396880196@qq.com"><meta name="copyright" content="qinaokun"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="数据链路层（ Data Link Layer） 属于2层  传输单元：帧  帧结构 帧头（目标MAC 6字节，源MAC 6字节，类型 2字节），上三层数据（MTU值 1500字节），帧尾4字节。 帧格式： 802.3 有线网卡 802.11 无线网卡 帧头中类型字段 类型： 0x0800：IP协议 ​            0x0806：ARP协议 类型字段的作用：识别上层协议，为上层提供服务。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据链路层及交换机命令">
-<meta property="og:url" content="http://dva.net.cn/2021/06/07/2021-06-07-%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E5%8F%8A%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:url" content="https://dva.net.cn/2021/06/07/2021-06-07-%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E5%8F%8A%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%91%BD%E4%BB%A4/index.html">
 <meta property="og:site_name" content="rain">
 <meta property="og:description" content="数据链路层（ Data Link Layer） 属于2层  传输单元：帧  帧结构 帧头（目标MAC 6字节，源MAC 6字节，类型 2字节），上三层数据（MTU值 1500字节），帧尾4字节。 帧格式： 802.3 有线网卡 802.11 无线网卡 帧头中类型字段 类型： 0x0800：IP协议 ​            0x0806：ARP协议 类型字段的作用：识别上层协议，为上层提供服务。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://dva.net.cn/2021/06/07/2021-06-07-%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E5%8F%8A%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%91%BD%E4%BB%A4/0.png">
+<meta property="og:image" content="https://dva.net.cn/2021/06/07/2021-06-07-%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E5%8F%8A%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%91%BD%E4%BB%A4/0.png">
 <meta property="article:published_time" content="2021-06-07T08:20:30.000Z">
 <meta property="article:modified_time" content="2021-06-09T04:01:06.515Z">
 <meta property="article:author" content="qinaokun">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://dva.net.cn/2021/06/07/2021-06-07-%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E5%8F%8A%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%91%BD%E4%BB%A4/0.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://dva.net.cn/2021/06/07/2021-06-07-%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E5%8F%8A%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%91%BD%E4%BB%A4/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+<meta name="twitter:image" content="https://dva.net.cn/2021/06/07/2021-06-07-%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E5%8F%8A%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%91%BD%E4%BB%A4/0.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://dva.net.cn/2021/06/07/2021-06-07-%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E5%8F%8A%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%91%BD%E4%BB%A4/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
   root: '/',
   algolia: undefined,
   localSearch: undefined,
